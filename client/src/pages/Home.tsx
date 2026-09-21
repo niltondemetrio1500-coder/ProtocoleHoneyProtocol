@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ChevronDown, Menu, UserRound, VolumeX } from "lucide-react";
 
 const VSL_REVEAL_SECONDS = 3295;
@@ -52,6 +52,9 @@ function Countdown() {
 
 export default function Home() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [videoPlaying, setVideoPlaying] = useState(false);
+  const [offersUnlocked, setOffersUnlocked] = useState(() => new URLSearchParams(window.location.search).get("preview") === "1");
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   return (
     <div className="source-page">
@@ -66,12 +69,15 @@ export default function Home() {
 
         <section className="source-video" aria-label="VSL">
           <div className="source-video-inner">
-            <img src="/manus-storage/video-thumbnail_8183135d.jpg" alt="Présentation vidéo" />
-            <div className="source-video-overlay"><strong>Ta vidéo a déjà commencé.</strong><VolumeX size={43} /><strong>Clique pour écouter</strong></div>
+            {!videoPlaying && <img className="source-video-poster" src="/manus-storage/video-thumbnail_8183135d.jpg" alt="Présentation vidéo" />}
+            <video className={videoPlaying ? "source-video-el is-playing" : "source-video-el"} ref={videoRef} playsInline controls preload="metadata" onPlay={() => setVideoPlaying(true)} onPause={() => setVideoPlaying(false)} onTimeUpdate={(event) => { if (event.currentTarget.currentTime >= VSL_REVEAL_SECONDS) setOffersUnlocked(true); }} onEnded={() => setOffersUnlocked(true)}>
+              <source src="/manus-storage/neuro-honey-vsl_4fbc1426.mp4" type="video/mp4" />
+            </video>
+            {!videoPlaying && <button className="source-video-overlay" onClick={() => { void videoRef.current?.play(); }}><strong>Ta vidéo a déjà commencé.</strong><VolumeX size={43} /><strong>Clique pour écouter</strong></button>}
           </div>
         </section>
 
-        <section className="source-revealed" aria-label={`Offre visible après ${Math.floor(VSL_REVEAL_SECONDS / 60)} minutes et ${VSL_REVEAL_SECONDS % 60} secondes`}>
+        <section className={`source-revealed ${offersUnlocked ? "is-unlocked" : "is-locked"}`} aria-label={`Offre visible après ${Math.floor(VSL_REVEAL_SECONDS / 60)} minutes et ${VSL_REVEAL_SECONDS % 60} secondes`}>
           <OfferCard />
 
           <section className="source-intro">
@@ -115,7 +121,7 @@ export default function Home() {
         </section>
       </main>
 
-      <footer className="source-footer"><p>© 2026 Neuro-Honey Protocol. Tous droits réservés.</p><p>Ce produit n'est pas destiné à diagnostiquer, traiter, guérir ou prévenir une quelconque maladie. Consultez un professionnel de santé avant de commencer tout nouveau protocole de santé.</p></footer>
+      <footer className={`source-footer ${offersUnlocked ? "is-visible" : "is-hidden"}`}><p>© 2026 Neuro-Honey Protocol. Tous droits réservés.</p><p>Ce produit n'est pas destiné à diagnostiquer, traiter, guérir ou prévenir une quelconque maladie. Consultez un professionnel de santé avant de commencer tout nouveau protocole de santé.</p></footer>
     </div>
   );
 }
