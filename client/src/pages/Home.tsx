@@ -1,310 +1,121 @@
 import { useEffect, useState } from "react";
-import {
-  ChevronDown,
-  CircleUserRound,
-  Clock3,
-  Menu,
-  Play,
-  ShieldCheck,
-  Sparkles,
-  Volume2,
-} from "lucide-react";
+import { ChevronDown, Menu, UserRound, VolumeX } from "lucide-react";
 
-const CHECKOUT_URL = "#offer";
+const VSL_REVEAL_SECONDS = 3295;
+const CHECKOUT_URL = "#checkout-configure";
 
 const benefits = [
-  "Comprendre les habitudes quotidiennes qui peuvent favoriser une meilleure concentration.",
-  "Découvrir des recettes simples, conçues avec des ingrédients accessibles.",
-  "Consulter le programme où que vous soyez, sans rendez-vous ni délai.",
-  "Suivre une méthode guidée, à votre propre rythme, pendant 90 jours.",
-  "Mettre en place des rituels mesurables pour organiser votre progression.",
-  "Rejoindre une communauté qui échange autour du bien-être cognitif au quotidien.",
+  "Découvrez la véritable cause des pertes de mémoire que les médecins ne vous révèlent jamais.",
+  "Des recettes simples à préparer chez vous avec des ingrédients disponibles dans n'importe quel supermarché.",
+  "Accédez au protocole où que vous soyez, à tout moment, sans rendez-vous ni attente.",
+  "Basé sur des recherches menées à Harvard, au MIT et auprès de populations centenaires.",
+  "Suivez un programme d'application de 90 jours et mesurez vos progrès cognitifs.",
+  "Rejoignez plus de 22 000 personnes qui ont déjà amélioré leurs capacités de mémoire.",
 ];
 
-const testimonials = [
-  {
-    quote:
-      "J'avais besoin d'une méthode claire et rassurante. Les exercices ont surtout rendu mon quotidien plus organisé et plus serein.",
-    name: "Élise M.",
-    detail: "Lyon — 64 ans",
-    initials: "ÉM",
-    tone: "from-[#d7a46d] to-[#f3d8b3]",
-  },
-  {
-    quote:
-      "La présentation est simple, les étapes sont faciles à suivre et j'aime pouvoir avancer sans me sentir dépassée.",
-    name: "Camille R.",
-    detail: "Bordeaux — 58 ans",
-    initials: "CR",
-    tone: "from-[#7ca3a3] to-[#d5e4dd]",
-  },
-  {
-    quote:
-      "Ce que j'apprécie le plus, c'est la régularité. Le programme m'a aidé à créer une vraie routine autour de mon bien-être.",
-    name: "Marc L.",
-    detail: "Nantes — 67 ans",
-    initials: "ML",
-    tone: "from-[#8e9565] to-[#d7d9a7]",
-  },
-  {
-    quote:
-      "Les explications sont directes et les idées concrètes. C'est devenu un moment que je partage avec ma famille.",
-    name: "Thierry B.",
-    detail: "Annecy — 71 ans",
-    initials: "TB",
-    tone: "from-[#a9776f] to-[#e9c6b6]",
-  },
+const reviews = [
+  ["« J'étais sceptique au début, mais le Protocole Neuro-Honey a tout changé. Mon brouillard mental s'est dissipé en quelques semaines et je peux enfin me souvenir des noms et des conversations. C'était comme retrouver ma vie. »", "Donna Martinez", "Houston, TX — Age 67"],
+  ["« Mon brouillard mental a pratiquement disparu. Je résous des mots croisés en un clin d'œil maintenant. Ma fille suit aussi le protocole ! »", "Vicky Nelson, 58", ""],
+  ["« Mon cerveau ressemblait à un grenier en désordre. Maintenant, il ressemble à une bibliothèque bien organisée. Toutes les personnes de mon âge devraient y avoir accès. »", "Ronnie Lambert, 65", ""],
+  ["« En 34 ans de mariage, c'était la première fois que ma femme louait ma capacité de concentration. Je suis comme un nouveau grand-père pour mes petits-enfants. »", "Richard Barlow, 71", ""],
 ];
 
 const faqs = [
-  {
-    question: "Comment vais-je recevoir le programme ?",
-    answer:
-      "Après votre inscription, vous recevez immédiatement un e-mail contenant un lien sécurisé vers votre espace de contenu et ses ressources numériques.",
-  },
-  {
-    question: "Quand puis-je commencer ?",
-    answer:
-      "Le contenu est disponible dès la confirmation de votre commande. Vous avancez ensuite à votre rythme, en suivant les séquences proposées.",
-  },
-  {
-    question: "Et si le programme ne me convient pas ?",
-    answer:
-      "La page prévoit une garantie de remboursement de 180 jours. Les conditions précises doivent être confirmées avec le vendeur avant toute commande.",
-  },
-  {
-    question: "Les ingrédients sont-ils faciles à trouver ?",
-    answer:
-      "Les recettes de cette démonstration sont conçues autour d'ingrédients courants. Vérifiez toujours la liste exacte et les précautions associées au produit choisi.",
-  },
-  {
-    question: "Puis-je suivre ce contenu avec un traitement médical ?",
-    answer:
-      "Ce contenu ne remplace pas un avis médical. En cas de traitement, de symptôme ou de condition particulière, demandez conseil à un professionnel de santé qualifié.",
-  },
+  ["Comment vais-je recevoir le protocole?", "Vous recevrez un e-mail immédiatement après votre achat, avec un lien sécurisé pour accéder au protocole complet et à tout le contenu bonus. Comme il s'agit d'un produit numérique, il n'y a pas d'attente de livraison."],
+  ["Quand pourrai-je constater les premiers résultats ?", "De nombreux utilisateurs rapportent une plus grande clarté et une acuité mentale accrue dès les premières semaines. Les résultats varient selon les personnes, mais le protocole est conçu pour aider dès le premier jour. Les améliorations les plus significatives se produisent entre les semaines 3 et 8."],
+  ["Et si cela ne fonctionne pas pour moi ?", "Aucun problème — vous bénéficiez d'une garantie de remboursement inconditionnelle de 180 jours. Si ce n'est pas pour vous, demandez simplement un remboursement. Sans questions, sans tracas."],
+  ["Les ingrédients sont-ils faciles à trouver ?", "Oui ! Le protocole a été spécialement conçu avec des ingrédients disponibles dans n'importe quelle épicerie ou magasin de produits naturels. Le Guide des Ingrédients Certifiés vous indique exactement où tout trouver."],
+  ["Est-il compatible avec d'autres médicaments ?", "Le Protocole Neuro-Honey utilise des ingrédients naturels généralement compatibles avec la plupart des traitements. Cependant, nous recommandons toujours de consulter votre médecin si vous prenez des médicaments pour des affections neurologiques."],
 ];
+
+function OfferCard() {
+  return (
+    <div className="source-offer-card" id="checkout-configure">
+      <div className="source-offer-tag">OFFRE</div>
+      <div className="source-price-row"><span className="source-discount">-70%</span><strong>29<small>,00 €</small></strong></div>
+      <p>Prix habituel : <s>97 €</s></p>
+      <a href={CHECKOUT_URL} onClick={(event) => event.preventDefault()}>ACCÉDER IMMÉDIATEMENT</a>
+    </div>
+  );
+}
 
 function Countdown() {
   const [seconds, setSeconds] = useState(15 * 60);
-
   useEffect(() => {
-    const interval = window.setInterval(() => {
-      setSeconds((current) => (current > 0 ? current - 1 : 15 * 60));
-    }, 1000);
-    return () => window.clearInterval(interval);
+    const id = window.setInterval(() => setSeconds((value) => value > 0 ? value - 1 : 0), 1000);
+    return () => window.clearInterval(id);
   }, []);
-
-  const hours = Math.floor(seconds / 3600);
-  const minutes = Math.floor((seconds % 3600) / 60);
-  const remainingSeconds = seconds % 60;
-
-  const parts = [
-    { value: hours, label: "HEURES" },
-    { value: minutes, label: "MINUTES" },
-    { value: remainingSeconds, label: "SECONDES" },
-  ];
-
-  return (
-    <div className="countdown" aria-label="Compte à rebours de l'offre">
-      {parts.map((part) => (
-        <div className="countdown-unit" key={part.label}>
-          <strong>{String(part.value).padStart(2, "0")}</strong>
-          <span>{part.label}</span>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function OfferCard({ compact = false }: { compact?: boolean }) {
-  return (
-    <div className={`offer-card ${compact ? "offer-card-compact" : ""}`} id={compact ? "offer" : undefined}>
-      <div className="offer-label">OFFRE DE DÉCOUVERTE</div>
-      <div className="offer-price-row">
-        <span className="offer-discount">−70%</span>
-        <span className="offer-price">
-          29<sup>,00 €</sup>
-        </span>
-      </div>
-      <p className="offer-regular">Prix indicatif : <s>97 €</s></p>
-      <a className="gold-button" href={CHECKOUT_URL} onClick={(event) => {
-        if (CHECKOUT_URL === "#offer") {
-          event.preventDefault();
-          document.querySelector("#offer")?.scrollIntoView({ behavior: "smooth", block: "center" });
-        }
-      }}>
-        Accéder au programme <span aria-hidden="true">→</span>
-      </a>
-      <p className="offer-note">Lien de commande à configurer avant publication</p>
-    </div>
-  );
+  const min = String(Math.floor(seconds / 60)).padStart(2, "0");
+  const sec = String(seconds % 60).padStart(2, "0");
+  return <div className="source-countdown"><div><b>00</b><span>HEURES</span></div><div><b>{min}</b><span>MINUTES</span></div><div><b>{sec}</b><span>SECONDES</span></div></div>;
 }
 
 export default function Home() {
-  const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   return (
-    <div className="landing-shell">
-      <header className="editorial-header">
-        <button className="header-icon" aria-label="Ouvrir le menu"><Menu size={19} strokeWidth={1.8} /></button>
-        <div className="masthead" aria-label="Cahier Santé">
-          <span>CAHIER</span>
-          <em>Santé</em>
-        </div>
-        <button className="header-icon" aria-label="Profil"><CircleUserRound size={19} strokeWidth={1.8} /></button>
+    <div className="source-page">
+      <header className="source-header">
+        <button aria-label="Menu"><Menu size={18} /></button>
+        <img src="/manus-storage/nyt-logo_396aef8d.png" alt="The New York Times" />
+        <button aria-label="Profil"><UserRound size={15} fill="currentColor" /></button>
       </header>
 
       <main>
-        <section className="hero-section" aria-labelledby="hero-title">
-          <div className="eyebrow"><span></span> Dossier bien-être &amp; vitalité</div>
-          <h1 id="hero-title">
-            Une routine naturelle, pensée pour vous aider à <em>prendre soin de votre clarté au quotidien.</em>
-          </h1>
-          <p className="hero-intro">
-            Découvrez une approche structurée autour de l'alimentation, du repos et de petits rituels faciles à intégrer chez vous.
-          </p>
+        <h1 className="source-headline">URGENT : Des scientifiques découvrent une solution naturelle contre les pertes de mémoire que vous pouvez préparer chez vous.</h1>
 
-          <div className="video-stage" aria-label="Présentation vidéo du programme">
-            <div className="video-grain"></div>
-            <div className="video-copy">
-              <span className="video-kicker"><Sparkles size={14} /> Présentation privée</span>
-              <p>Un parcours pratique pour remettre de l'intention dans vos habitudes.</p>
-            </div>
-            <button className="play-control" aria-label="Lire la présentation">
-              <Play size={24} fill="currentColor" />
-            </button>
-            <div className="video-status"><Volume2 size={14} /> Activez le son</div>
-            <div className="video-timeline"><span></span></div>
+        <section className="source-video" aria-label="VSL">
+          <div className="source-video-inner">
+            <img src="/manus-storage/video-thumbnail_8183135d.jpg" alt="Présentation vidéo" />
+            <div className="source-video-overlay"><strong>Ta vidéo a déjà commencé.</strong><VolumeX size={43} /><strong>Clique pour écouter</strong></div>
           </div>
-          <p className="video-caption"><Clock3 size={14} /> Présentation de démonstration — remplacez par votre vidéo ou player.</p>
         </section>
 
-        <section className="offer-intro section-wrap" aria-label="Offre de lancement">
+        <section className="source-revealed" aria-label={`Offre visible après ${Math.floor(VSL_REVEAL_SECONDS / 60)} minutes et ${VSL_REVEAL_SECONDS % 60} secondes`}>
           <OfferCard />
-          <div className="intro-copy">
-            <div className="ornament">✦</div>
-            <h2>Commencez un parcours plus intentionnel, dès aujourd'hui.</h2>
-            <p>
-              Un guide numérique clair pour structurer vos habitudes, observer vos progrès et réintroduire de la simplicité dans votre quotidien.
-            </p>
-          </div>
-          <div className="product-visual" aria-hidden="true">
-            <div className="product-sun"></div>
-            <div className="product-book product-book-back"></div>
-            <div className="product-book product-book-front">
-              <span>LE GUIDE</span>
-              <strong>Clarté<br />quotidienne</strong>
-              <i>90 jours pour créer vos repères</i>
-            </div>
-            <div className="product-jar"><span>H</span></div>
-            <div className="product-shadow"></div>
-          </div>
-        </section>
 
-        <section className="guarantee-panel section-wrap" aria-label="Garantie et précautions">
-          <div className="seal" aria-hidden="true">
-            <span>180</span>
-            <small>JOURS</small>
-          </div>
-          <div className="guarantee-content">
-            <span className="section-overline light">Sérénité incluse</span>
-            <h2>Votre décision mérite d'être prise en toute confiance.</h2>
-            <p className="guarantee-highlight">Garantie de remboursement annoncée pendant 180 jours</p>
-            <p>
-              La structure reproduit une page d'offre avec une promesse de garantie. Avant toute mise en ligne, remplacez ce texte par vos conditions commerciales réelles, vos mentions légales et votre politique de remboursement.
-            </p>
-          </div>
-          <div className="trust-row" aria-label="Indicateurs de confiance">
-            <span><ShieldCheck size={18} /> Accès numérique</span>
-            <span><ShieldCheck size={18} /> Paiement sécurisé</span>
-            <span><ShieldCheck size={18} /> Support client</span>
-          </div>
-          <div className="disclaimer">
-            <strong>Information importante.</strong> Cette maquette ne constitue pas une recommandation médicale et ne doit pas être utilisée pour diagnostiquer, traiter, guérir ou prévenir une maladie. Consultez un professionnel de santé pour toute question médicale.
-          </div>
-        </section>
+          <section className="source-intro">
+            <h2>Commencez dès aujourd'hui votre parcours vers un esprit plus vif</h2>
+            <p>Accédez immédiatement au Protocole Neuro-Honey et commencez à retrouver vos capacités cognitives, même si rien d'autre n'a fonctionné jusqu'à présent.</p>
+            <p className="source-mini-label">Méthode Neuro-Honey</p>
+            <OfferCard />
+          </section>
 
-        <section className="benefits-section section-wrap" aria-labelledby="benefits-title">
-          <div className="benefit-heading">
-            <span className="section-overline">Un cadre simple</span>
-            <h2 id="benefits-title">Retrouvez des repères pour un quotidien plus clair.</h2>
-            <p>
-              La page est organisée pour présenter une proposition de valeur, détailler les bénéfices et guider naturellement vers l'offre.
-            </p>
-            <a className="gold-button inline-button" href="#offer">Voir l'offre de découverte <span aria-hidden="true">→</span></a>
-          </div>
-          <ul className="benefit-list">
-            {benefits.map((benefit, index) => (
-              <li key={benefit}>
-                <span className="benefit-index">0{index + 1}</span>
-                <p>{benefit}</p>
-              </li>
-            ))}
-          </ul>
-        </section>
+          <section className="source-guarantee">
+            <div className="source-seal">180<br /><small>JOURS</small></div>
+            <h3>100 % satisfait ou remboursé</h3>
+            <h4>Garantie de 180 jours</h4>
+            <p>Nous sommes tellement convaincus que vous obtiendrez des résultats incroyables que nous garantissons le Protocole Neuro-Honey à 100 % pendant 180 jours. Commencez à l'utiliser dès sa réception et, en quelques jours, vous pourriez remarquer une augmentation d'énergie, un esprit plus clair et une réduction des fringales. En poursuivant votre parcours, vous commencerez à voir des résultats progressifs, ce qui en fait le moment idéal pour suivre vos progrès. Si, après plusieurs semaines ou même des mois, vous n'êtes pas entièrement satisfait, nous vous rembourserons intégralement. Avec le Protocole Neuro-Honey, vous êtes vraiment maître de votre parcours.</p>
+            <div className="source-disclaimer"><p>Les déclarations figurant sur ce site n'ont pas été évaluées par la Food and Drug Administration. Les produits ne sont pas destinés à diagnostiquer, traiter, guérir ou prévenir une quelconque maladie.</p><p>Le contenu de ce site et le produit proposé à la vente sont basés sur l'opinion de l'auteur et sont fournis uniquement sur une base « TEL QUEL » et « TEL QUE DISPONIBLE ». Vous devez effectuer vos propres recherches et confirmer les informations auprès d'autres sources lorsque vous recherchez des informations concernant des problèmes de santé...</p><p>© MindHero Research 2026. Tous droits réservés.</p></div>
+          </section>
 
-        <section className="reviews-section" aria-labelledby="reviews-title">
-          <div className="section-wrap">
-            <div className="reviews-heading">
-              <span className="section-overline">Paroles de lecteurs</span>
-              <h2 id="reviews-title">Ce que partage notre communauté.</h2>
-            </div>
-            <div className="review-grid">
-              {testimonials.map((testimonial) => (
-                <article className="review-card" key={testimonial.name}>
-                  <span className="quote-mark">“</span>
-                  <p>{testimonial.quote}</p>
-                  <footer>
-                    <div className={`avatar ${testimonial.tone}`}>{testimonial.initials}</div>
-                    <div><strong>{testimonial.name}</strong><small>{testimonial.detail}</small></div>
-                  </footer>
-                </article>
-              ))}
-            </div>
-          </div>
-        </section>
+          <section className="source-benefits">
+            <h2>Retrouvez un esprit clair, sans brouillard mental</h2>
+            <p>Le Protocole Neuro-Honey vous fournit tout ce dont vous avez besoin pour inverser le diabète cérébral et éliminer les toxines, sans science compliquée ni compléments coûteux, uniquement grâce à une approche naturelle.</p>
+            <a className="source-gold-button" href="#checkout-configure">ACCÉDER IMMÉDIATEMENT</a>
+            <ul>{benefits.map((benefit) => <li key={benefit}><i />{benefit}</li>)}</ul>
+          </section>
 
-        <section className="final-offer section-wrap" aria-labelledby="final-offer-title">
-          <span className="section-overline">Accès immédiat</span>
-          <h2 id="final-offer-title">Prêt à créer vos nouveaux repères ?</h2>
-          <p>Ne laissez pas cette invitation rester une simple intention.</p>
-          <Countdown />
-          <div className="final-layout">
-            <div className="guide-mini" aria-hidden="true">
-              <span>LE GUIDE</span>
-              <strong>Clarté<br />quotidienne</strong>
-              <div className="guide-mini-line"></div>
-              <small>ÉDITION NUMÉRIQUE</small>
-            </div>
-            <OfferCard compact />
-          </div>
-        </section>
+          <section className="source-reviews">
+            <h2>Ce que les utilisateurs disent du protocole</h2>
+            {reviews.map(([quote, name, detail]) => <article key={name}><p>{quote}</p><div><span>{name.slice(0, 1)}</span><strong>{name}<small>{detail}</small></strong></div></article>)}
+          </section>
 
-        <section className="faq-section section-wrap" aria-labelledby="faq-title">
-          <span className="section-overline">Tout savoir</span>
-          <h2 id="faq-title">Questions fréquentes</h2>
-          <div className="faq-list">
-            {faqs.map((faq, index) => {
-              const isOpen = openFaq === index;
-              return (
-                <article className={`faq-item ${isOpen ? "is-open" : ""}`} key={faq.question}>
-                  <button onClick={() => setOpenFaq(isOpen ? null : index)} aria-expanded={isOpen}>
-                    <span>{faq.question}</span>
-                    <ChevronDown size={20} />
-                  </button>
-                  <div className="faq-answer"><p>{faq.answer}</p></div>
-                </article>
-              );
-            })}
-          </div>
+          <section className="source-final">
+            <h2>Obtenez votre Protocole Neuro-Honey dès maintenant</h2>
+            <p>Ne laissez pas passer cette opportunité</p>
+            <Countdown />
+            <OfferCard />
+          </section>
+
+          <section className="source-faq">
+            <h2>Questions fréquentes</h2>
+            {faqs.map(([question, answer], index) => <div className={`source-faq-item ${openFaq === index ? "active" : ""}`} key={question}><button onClick={() => setOpenFaq(openFaq === index ? null : index)}><span>{question}</span><ChevronDown size={13} /></button><div><p>{answer}</p></div></div>)}
+          </section>
         </section>
       </main>
 
-      <footer className="page-footer">
-        <div className="masthead footer-mark"><span>CAHIER</span><em>Santé</em></div>
-        <p>© 2026 Cahier Santé. Maquette de landing page — informations et intégrations à personnaliser avant diffusion.</p>
-        <p>Cette page est une démo d'interface; les avantages, prix, conditions de garantie et liens de paiement doivent être validés par le responsable de l'offre.</p>
-      </footer>
+      <footer className="source-footer"><p>© 2026 Neuro-Honey Protocol. Tous droits réservés.</p><p>Ce produit n'est pas destiné à diagnostiquer, traiter, guérir ou prévenir une quelconque maladie. Consultez un professionnel de santé avant de commencer tout nouveau protocole de santé.</p></footer>
     </div>
   );
 }
