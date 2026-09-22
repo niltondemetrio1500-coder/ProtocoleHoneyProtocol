@@ -46,3 +46,8 @@
 .source-offer-tag{z-index:20;top:-16px;min-width:92px;padding:7px 20px 6px;line-height:1.1;white-space:nowrap;text-align:center;visibility:visible;opacity:1}
 
 .source-offer-tag{min-width:106px;padding:8px 18px 7px;font-size:13px!important;letter-spacing:1px;font-weight:900;border-radius:4px;line-height:1.15}
+
+/* Match exato do cartão pós-VSL da referência */
+.source-offer-card{width:calc(100% - 30px)!important;max-width:450px!important;margin:0 auto 40px!important;padding:30px 20px!important;border:2px solid #9900ff;border-radius:12px;overflow:visible!important}
+.source-offer-tag{top:-16px!important;left:50%!important;min-width:0!important;padding:8px 20px!important;border-radius:6px!important;font-size:13px!important;font-weight:800!important;letter-spacing:1.5px!important;line-height:normal!important;white-space:nowrap!important;transform:translateX(-50%)!important}
+.source-price-row{gap:15px!important;margin-top:10px!important}
