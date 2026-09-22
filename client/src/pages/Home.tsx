@@ -73,6 +73,25 @@ export default function Home() {
     revealTimer.current = window.setTimeout(() => setOffersUnlocked(true), VSL_REVEAL_SECONDS * 1000);
   };
 
+  useEffect(() => {
+    const player = document.querySelector("vturb-smartplayer");
+    const videoArea = document.querySelector(".source-video");
+    const startFromPlayer = () => startRevealTimer();
+    const startFromPointer = (event: PointerEvent) => {
+      if (videoArea && event.target instanceof Node && videoArea.contains(event.target)) startRevealTimer();
+    };
+    player?.addEventListener("player:play", startFromPlayer);
+    player?.addEventListener("player:playing", startFromPlayer);
+    player?.addEventListener("play", startFromPlayer);
+    document.addEventListener("pointerdown", startFromPointer, true);
+    return () => {
+      player?.removeEventListener("player:play", startFromPlayer);
+      player?.removeEventListener("player:playing", startFromPlayer);
+      player?.removeEventListener("play", startFromPlayer);
+      document.removeEventListener("pointerdown", startFromPointer, true);
+    };
+  }, [offersUnlocked]);
+
   useEffect(() => () => {
     if (revealTimer.current !== null) window.clearTimeout(revealTimer.current);
   }, []);
@@ -89,7 +108,7 @@ export default function Home() {
         <h1 className="source-headline">URGENT : Des scientifiques découvrent une solution naturelle contre les pertes de mémoire que vous pouvez préparer chez vous.</h1>
 
         <section className="source-video" aria-label="VSL">
-          <div className="source-video-inner" onClick={startRevealTimer}>
+          <div className="source-video-inner" onClickCapture={startRevealTimer} onPointerDownCapture={startRevealTimer}>
             {createElement("vturb-smartplayer", { id: "vid-6ab2848941fb62489316cee3", style: { display: "block", margin: "0 auto", width: "100%", maxWidth: "400px" } }, createElement("div", { className: "vturb-player-placeholder" }))}
           </div>
         </section>
