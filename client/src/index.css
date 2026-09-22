@@ -56,3 +56,11 @@
 .source-revealed{position:relative!important;z-index:50!important;padding-top:18px!important;background:#fff}
 .source-offer-card{position:relative!important;z-index:60!important}
 .source-offer-tag{z-index:100!important;top:-16px!important}
+
+/* Teste de desbloqueio aos 3:00 após o primeiro clique na VSL */
+.source-revealed.is-locked{display:none!important}
+.source-revealed.is-unlocked{display:block!important}
+.source-vsl-timing{margin:0;padding:12px 15px 16px;text-align:center;color:#6b8a9a;background:#fff;font-size:12px;font-weight:600}
+
+.source-footer.is-locked{display:none!important}
+.source-footer.is-unlocked{display:block}

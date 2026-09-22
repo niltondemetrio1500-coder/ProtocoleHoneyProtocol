@@ -1,7 +1,7 @@
-import { createElement, useEffect, useState } from "react";
+import { createElement, useEffect, useRef, useState } from "react";
 import { ChevronDown, Menu, UserRound } from "lucide-react";
 
-const VSL_REVEAL_SECONDS = 3295;
+const VSL_REVEAL_SECONDS = 180;
 const CHECKOUT_URL = "https://pay.hotmart.com/T107723445C";
 
 const benefits = [
@@ -52,6 +52,9 @@ function Countdown() {
 
 export default function Home() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [offersUnlocked, setOffersUnlocked] = useState(() => new URLSearchParams(window.location.search).get("preview") === "1");
+  const revealTimer = useRef<number | null>(null);
+  const timerStarted = useRef(false);
 
   useEffect(() => {
     const scriptId = "vturb-player-6ab2848941fb62489316cee3";
@@ -62,6 +65,16 @@ export default function Home() {
     script.src = "https://scripts.converteai.net/dc8ab8c0-f9ac-47c3-af12-a4174ba40c45/players/6ab2848941fb62489316cee3/v4/player.js";
     script.async = true;
     document.head.appendChild(script);
+  }, []);
+
+  const startRevealTimer = () => {
+    if (timerStarted.current || offersUnlocked) return;
+    timerStarted.current = true;
+    revealTimer.current = window.setTimeout(() => setOffersUnlocked(true), VSL_REVEAL_SECONDS * 1000);
+  };
+
+  useEffect(() => () => {
+    if (revealTimer.current !== null) window.clearTimeout(revealTimer.current);
   }, []);
 
   return (
@@ -76,12 +89,13 @@ export default function Home() {
         <h1 className="source-headline">URGENT : Des scientifiques découvrent une solution naturelle contre les pertes de mémoire que vous pouvez préparer chez vous.</h1>
 
         <section className="source-video" aria-label="VSL">
-          <div className="source-video-inner">
+          <div className="source-video-inner" onClick={startRevealTimer}>
             {createElement("vturb-smartplayer", { id: "vid-6ab2848941fb62489316cee3", style: { display: "block", margin: "0 auto", width: "100%", maxWidth: "400px" } }, createElement("div", { className: "vturb-player-placeholder" }))}
           </div>
         </section>
 
-        <section className="source-revealed" aria-label={`Offre visible après ${Math.floor(VSL_REVEAL_SECONDS / 60)} minutes et ${VSL_REVEAL_SECONDS % 60} secondes`}>
+        {!offersUnlocked && <p className="source-vsl-timing" role="status">L'offre apparaîtra automatiquement après 3 minutes de vidéo.</p>}
+        <section className={`source-revealed ${offersUnlocked ? "is-unlocked" : "is-locked"}`} aria-label={`Offre visible après ${Math.floor(VSL_REVEAL_SECONDS / 60)} minutes et ${VSL_REVEAL_SECONDS % 60} secondes`}>
           <OfferCard />
 
           <section className="source-intro">
@@ -102,7 +116,7 @@ export default function Home() {
           <section className="source-benefits">
             <h2>Retrouvez un esprit clair, sans brouillard mental</h2>
             <p>Le Protocole Neuro-Honey vous fournit tout ce dont vous avez besoin pour inverser le diabète cérébral et éliminer les toxines, sans science compliquée ni compléments coûteux, uniquement grâce à une approche naturelle.</p>
-            <a className="source-gold-button" href="#checkout-configure">ACCÉDER IMMÉDIATEMENT</a>
+            <a className="source-gold-button" href={CHECKOUT_URL}>ACCÉDER IMMÉDIATEMENT</a>
             <ul>{benefits.map((benefit) => <li key={benefit}><i />{benefit}</li>)}</ul>
           </section>
 
@@ -125,7 +139,7 @@ export default function Home() {
         </section>
       </main>
 
-      <footer className="source-footer"><p>© 2026 Neuro-Honey Protocol. Tous droits réservés.</p><p>Ce produit n'est pas destiné à diagnostiquer, traiter, guérir ou prévenir une quelconque maladie. Consultez un professionnel de santé avant de commencer tout nouveau protocole de santé.</p></footer>
+      <footer className={`source-footer ${offersUnlocked ? "is-unlocked" : "is-locked"}`}><p>© 2026 Neuro-Honey Protocol. Tous droits réservés.</p><p>Ce produit n'est pas destiné à diagnostiquer, traiter, guérir ou prévenir une quelconque maladie. Consultez un professionnel de santé avant de commencer tout nouveau protocole de santé.</p></footer>
     </div>
   );
 }
