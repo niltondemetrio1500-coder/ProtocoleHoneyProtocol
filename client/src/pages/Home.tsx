@@ -94,7 +94,6 @@ export default function Home() {
           </div>
         </section>
 
-        {!offersUnlocked && <p className="source-vsl-timing" role="status">L'offre apparaîtra automatiquement après 3 minutes de vidéo.</p>}
         <section className={`source-revealed ${offersUnlocked ? "is-unlocked" : "is-locked"}`} aria-label={`Offre visible après ${Math.floor(VSL_REVEAL_SECONDS / 60)} minutes et ${VSL_REVEAL_SECONDS % 60} secondes`}>
           <OfferCard />
 
