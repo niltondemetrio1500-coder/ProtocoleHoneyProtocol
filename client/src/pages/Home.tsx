@@ -52,7 +52,10 @@ function Countdown() {
 
 export default function Home() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
-  const [offersUnlocked, setOffersUnlocked] = useState(() => new URLSearchParams(window.location.search).get("preview") === "1");
+  const [offersUnlocked, setOffersUnlocked] = useState(() => {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("locked") !== "1" || params.get("preview") === "1";
+  });
   const playerHost = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -61,13 +64,18 @@ export default function Home() {
 
     const player = host;
     let timer: number | undefined;
-    const reveal = () => {
-      if (new URLSearchParams(window.location.search).get("preview") === "1") {
+    const scheduleReveal = () => {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("locked") !== "1" || params.get("preview") === "1") {
         setOffersUnlocked(true);
         return;
       }
-      timer = window.setTimeout(() => setOffersUnlocked(true), VSL_REVEAL_SECONDS * 1000);
+      if (!timer) timer = window.setTimeout(() => setOffersUnlocked(true), VSL_REVEAL_SECONDS * 1000);
     };
+    const reveal = () => {
+      scheduleReveal();
+    };
+    scheduleReveal();
     player?.addEventListener("player:ready", reveal, { once: true });
 
     const scriptId = "vturb-player-6ab2848941fb62489316cee3";
@@ -104,6 +112,8 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        {!offersUnlocked && <div className="source-waiting" role="status">La présentation continue. L'offre apparaît automatiquement après {Math.floor(VSL_REVEAL_SECONDS / 60)} min {String(VSL_REVEAL_SECONDS % 60).padStart(2, "0")} s.</div>}
 
         <section className={`source-revealed ${offersUnlocked ? "is-unlocked" : "is-locked"}`} aria-label={`Offre visible après ${Math.floor(VSL_REVEAL_SECONDS / 60)} minutes et ${VSL_REVEAL_SECONDS % 60} secondes`}>
           <OfferCard />

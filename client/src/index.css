@@ -53,3 +53,5 @@
 .source-video-inner{height:196px!important;min-height:196px!important;aspect-ratio:auto!important}
 .source-vturb-host vturb-smartplayer{position:absolute!important;top:0!important;left:50%!important;width:111px!important;height:196px!important;max-width:none!important;transform:translateX(-50%)!important}
 @media (max-width:560px){.source-video-inner{height:196px!important;min-height:196px!important}.source-vturb-host vturb-smartplayer{width:111px!important;height:196px!important}}
+
+.source-waiting{padding:18px 15px 28px;text-align:center;color:var(--muted);font-size:12px;font-weight:600;background:#fff}
