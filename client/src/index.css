@@ -39,3 +39,10 @@
 .source-video-inner{width:100%!important;height:min(177.3399014778325vw,709.36px)!important;min-height:0!important;aspect-ratio:auto!important;display:block!important;overflow:hidden!important;background:#000!important}
 .source-video-inner vturb-smartplayer{display:block!important;width:100%!important;max-width:400px!important;height:100%!important;aspect-ratio:9 / 16!important;margin:0 auto!important;background:#000!important}
 .source-video-inner .vturb-player-placeholder{position:relative;width:100%;height:100%;padding:0!important;z-index:0;background:#000!important}
+
+/* Rótulo da oferta sempre visível sobre o cartão */
+.source-revealed{position:relative;z-index:5}
+.source-offer-card{position:relative;z-index:6;overflow:visible}
+.source-offer-tag{z-index:20;top:-16px;min-width:92px;padding:7px 20px 6px;line-height:1.1;white-space:nowrap;text-align:center;visibility:visible;opacity:1}
+
+.source-offer-tag{min-width:106px;padding:8px 18px 7px;font-size:13px!important;letter-spacing:1px;font-weight:900;border-radius:4px;line-height:1.15}

@@ -2,7 +2,7 @@ import { createElement, useEffect, useState } from "react";
 import { ChevronDown, Menu, UserRound } from "lucide-react";
 
 const VSL_REVEAL_SECONDS = 3295;
-const CHECKOUT_URL = "#checkout-configure";
+const CHECKOUT_URL = "https://pay.hotmart.com/T107723445C";
 
 const benefits = [
   "Découvrez la véritable cause des pertes de mémoire que les médecins ne vous révèlent jamais.",
@@ -34,7 +34,7 @@ function OfferCard() {
       <div className="source-offer-tag">OFFRE</div>
       <div className="source-price-row"><span className="source-discount">-70%</span><strong>29<small>,00 €</small></strong></div>
       <p>Prix habituel : <s>97 €</s></p>
-      <a href={CHECKOUT_URL} onClick={(event) => event.preventDefault()}>ACCÉDER IMMÉDIATEMENT</a>
+      <a href={CHECKOUT_URL}>ACCÉDER IMMÉDIATEMENT</a>
     </div>
   );
 }
