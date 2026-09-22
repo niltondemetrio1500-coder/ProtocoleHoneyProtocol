@@ -21,37 +21,3 @@
 .source-offer-card a,.source-gold-button{min-height:50px;padding:16px 14px;font-size:14px}
 @media (min-width:768px){.source-video-inner{min-height:500px}.source-video-inner img{width:280px}.source-video-overlay{display:none}}
 @media (max-width:560px){.source-video-inner{height:235px;min-height:235px}.source-video-inner img{width:110px}.source-offer-card{width:300px}.source-offer-card a{min-height:50px}}
-
-/* Player MP4 integrado */
-.source-video-inner video{width:100%;height:100%;object-fit:contain;background:#000}
-.source-video-overlay{cursor:pointer;border:1px solid #fff}
-.source-revealed.is-locked{display:none}
-.source-revealed.is-unlocked{display:block}
-@media (min-width:768px){.source-video-inner video{width:280px}.source-video-inner{background:#000}}
-@media (max-width:560px){.source-video-inner video{width:110px}}
-
-.source-footer.is-hidden{display:none}
-.source-footer.is-visible{display:block}
-
-.source-video-inner{background:#000}
-.source-video-poster{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000}
-.source-video-inner .source-video-el{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000;opacity:0}
-.source-video-inner .source-video-el.is-playing{opacity:1}
-@media (min-width:768px){.source-video-inner .source-video-el{width:100%}}
-
-.source-video-inner .source-video-poster{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000}
-
-/* Smartplayer VSL fornecido pelo usuário */
-.source-vturb-host{position:absolute;inset:0;width:100%;height:100%;background:#000;overflow:hidden}
-.source-vturb-host vturb-smartplayer{display:block!important;width:100%!important;max-width:100%!important;height:100%!important;margin:0 auto!important;background:#000}
-.source-vturb-host .thumbnail{height:100%!important;padding:0!important}
-
-.source-vturb-host .thumbnail,.source-vturb-host .thumbnail-image{background:#000!important}
-.source-vturb-host .thumbnail-image{object-fit:contain!important;left:50%!important;transform:translateX(-50%)!important;width:100%!important;height:100%!important}
-
-/* Proporção da referência: faixa baixa preta e vídeo 406x720 centralizado */
-.source-video-inner{height:196px!important;min-height:196px!important;aspect-ratio:auto!important}
-.source-vturb-host vturb-smartplayer{position:absolute!important;top:0!important;left:50%!important;width:111px!important;height:196px!important;max-width:none!important;transform:translateX(-50%)!important}
-@media (max-width:560px){.source-video-inner{height:196px!important;min-height:196px!important}.source-vturb-host vturb-smartplayer{width:111px!important;height:196px!important}}
-
-.source-waiting{padding:18px 15px 28px;text-align:center;color:var(--muted);font-size:12px;font-weight:600;background:#fff}

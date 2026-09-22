@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from "react";
-import { ChevronDown, Menu, UserRound } from "lucide-react";
+import { useEffect, useState } from "react";
+import { ChevronDown, Menu, UserRound, VolumeX } from "lucide-react";
 
 const VSL_REVEAL_SECONDS = 3295;
 const CHECKOUT_URL = "#checkout-configure";
@@ -52,46 +52,6 @@ function Countdown() {
 
 export default function Home() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
-  const [offersUnlocked, setOffersUnlocked] = useState(() => {
-    const params = new URLSearchParams(window.location.search);
-    return params.get("locked") !== "1" || params.get("preview") === "1";
-  });
-  const playerHost = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    const host = playerHost.current;
-    if (!host) return;
-
-    const player = host;
-    let timer: number | undefined;
-    const scheduleReveal = () => {
-      const params = new URLSearchParams(window.location.search);
-      if (params.get("locked") !== "1" || params.get("preview") === "1") {
-        setOffersUnlocked(true);
-        return;
-      }
-      if (!timer) timer = window.setTimeout(() => setOffersUnlocked(true), VSL_REVEAL_SECONDS * 1000);
-    };
-    const reveal = () => {
-      scheduleReveal();
-    };
-    scheduleReveal();
-    player?.addEventListener("player:ready", reveal, { once: true });
-
-    const scriptId = "vturb-player-6ab2848941fb62489316cee3";
-    let script = document.getElementById(scriptId) as HTMLScriptElement | null;
-    if (!script) {
-      script = document.createElement("script");
-      script.id = scriptId;
-      script.src = "https://scripts.converteai.net/dc8ab8c0-f9ac-47c3-af12-a4174ba40c45/players/6ab2848941fb62489316cee3/v4/player.js";
-      script.async = true;
-      document.head.appendChild(script);
-    }
-    return () => {
-      if (timer) window.clearTimeout(timer);
-      player?.removeEventListener("player:ready", reveal);
-    };
-  }, []);
 
   return (
     <div className="source-page">
@@ -106,16 +66,12 @@ export default function Home() {
 
         <section className="source-video" aria-label="VSL">
           <div className="source-video-inner">
-            <div className="source-vturb-host" aria-label="Lecteur vidéo Neuro-Honey">
-              {/* @ts-expect-error VTurb custom element */}
-              <vturb-smartplayer ref={playerHost} id="vid-6ab2848941fb62489316cee3" original-id="vid-6ab2848941fb62489316cee3" style={{ display: "block", margin: "0 auto", width: "100%", maxWidth: "100%" }} />
-            </div>
+            <img src="/manus-storage/video-thumbnail_8183135d.jpg" alt="Présentation vidéo" />
+            <div className="source-video-overlay"><strong>Ta vidéo a déjà commencé.</strong><VolumeX size={43} /><strong>Clique pour écouter</strong></div>
           </div>
         </section>
 
-        {!offersUnlocked && <div className="source-waiting" role="status">La présentation continue. L'offre apparaît automatiquement après {Math.floor(VSL_REVEAL_SECONDS / 60)} min {String(VSL_REVEAL_SECONDS % 60).padStart(2, "0")} s.</div>}
-
-        <section className={`source-revealed ${offersUnlocked ? "is-unlocked" : "is-locked"}`} aria-label={`Offre visible après ${Math.floor(VSL_REVEAL_SECONDS / 60)} minutes et ${VSL_REVEAL_SECONDS % 60} secondes`}>
+        <section className="source-revealed" aria-label={`Offre visible après ${Math.floor(VSL_REVEAL_SECONDS / 60)} minutes et ${VSL_REVEAL_SECONDS % 60} secondes`}>
           <OfferCard />
 
           <section className="source-intro">
@@ -159,7 +115,7 @@ export default function Home() {
         </section>
       </main>
 
-      <footer className={`source-footer ${offersUnlocked ? "is-visible" : "is-hidden"}`}><p>© 2026 Neuro-Honey Protocol. Tous droits réservés.</p><p>Ce produit n'est pas destiné à diagnostiquer, traiter, guérir ou prévenir une quelconque maladie. Consultez un professionnel de santé avant de commencer tout nouveau protocole de santé.</p></footer>
+      <footer className="source-footer"><p>© 2026 Neuro-Honey Protocol. Tous droits réservés.</p><p>Ce produit n'est pas destiné à diagnostiquer, traiter, guérir ou prévenir une quelconque maladie. Consultez un professionnel de santé avant de commencer tout nouveau protocole de santé.</p></footer>
     </div>
   );
 }
