@@ -59,12 +59,17 @@ export default function Home() {
   useEffect(() => {
     const scriptId = "vturb-player-6ab2848941fb62489316cee3";
     if (document.getElementById(scriptId)) return;
-    const script = document.createElement("script");
-    script.id = scriptId;
-    script.type = "text/javascript";
-    script.src = "https://scripts.converteai.net/dc8ab8c0-f9ac-47c3-af12-a4174ba40c45/players/6ab2848941fb62489316cee3/v4/player.js";
-    script.async = true;
-    document.head.appendChild(script);
+    const loadPlayer = () => {
+      if (document.getElementById(scriptId)) return;
+      const script = document.createElement("script");
+      script.id = scriptId;
+      script.type = "text/javascript";
+      script.src = "https://scripts.converteai.net/dc8ab8c0-f9ac-47c3-af12-a4174ba40c45/players/6ab2848941fb62489316cee3/v4/player.js";
+      script.async = true;
+      document.head.appendChild(script);
+    };
+    const delayedLoad = window.setTimeout(loadPlayer, 120);
+    return () => window.clearTimeout(delayedLoad);
   }, []);
 
   const startRevealTimer = () => {
