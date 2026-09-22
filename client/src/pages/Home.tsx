@@ -1,7 +1,7 @@
 import { createElement, useEffect, useRef, useState } from "react";
 import { ChevronDown, Menu, UserRound } from "lucide-react";
 
-const VSL_REVEAL_SECONDS = 180;
+const VSL_REVEAL_SECONDS = 3295;
 const CHECKOUT_URL = "https://pay.hotmart.com/T107723445C";
 
 const benefits = [
