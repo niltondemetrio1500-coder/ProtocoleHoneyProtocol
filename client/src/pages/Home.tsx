@@ -53,6 +53,7 @@ function Countdown() {
 export default function Home() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [offersUnlocked, setOffersUnlocked] = useState(() => new URLSearchParams(window.location.search).get("preview") === "1");
+  const [playerReady, setPlayerReady] = useState(false);
   const revealTimer = useRef<number | null>(null);
   const timerStarted = useRef(false);
 
@@ -97,6 +98,17 @@ export default function Home() {
     };
   }, [offersUnlocked]);
 
+  useEffect(() => {
+    const player = document.querySelector("vturb-smartplayer");
+    const markReady = () => setPlayerReady(true);
+    const fallback = window.setTimeout(markReady, 7000);
+    player?.addEventListener("player:ready", markReady, { once: true });
+    return () => {
+      window.clearTimeout(fallback);
+      player?.removeEventListener("player:ready", markReady);
+    };
+  }, []);
+
   useEffect(() => () => {
     if (revealTimer.current !== null) window.clearTimeout(revealTimer.current);
   }, []);
@@ -114,6 +126,10 @@ export default function Home() {
 
         <section className="source-video" aria-label="VSL">
           <div className="source-video-inner" onClickCapture={startRevealTimer} onPointerDownCapture={startRevealTimer}>
+            <div className={`vsl-loading ${playerReady ? "is-ready" : ""}`} role="status" aria-live="polite">
+              <span className="vsl-spinner" />
+              <span>Chargement de la vidéo</span>
+            </div>
             {createElement("vturb-smartplayer", { id: "vid-6ab2848941fb62489316cee3", style: { display: "block", margin: "0 auto", width: "100%", maxWidth: "400px" } }, createElement("div", { className: "vturb-player-placeholder" }))}
           </div>
         </section>

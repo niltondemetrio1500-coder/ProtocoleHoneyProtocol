@@ -63,3 +63,23 @@
 
 .source-footer.is-locked{display:none!important}
 .source-footer.is-unlocked{display:block}
+
+/* Loader suave da VSL */
+.vsl-loading{position:absolute;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;color:#fff;background:rgba(0,0,0,.34);font-size:13px;font-weight:600;opacity:1;transition:opacity .45s ease,visibility .45s ease}
+.vsl-loading.is-ready{opacity:0;visibility:hidden;pointer-events:none}
+.vsl-spinner{width:34px;height:34px;border:3px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:vsl-spin .8s linear infinite}
+@keyframes vsl-spin{to{transform:rotate(360deg)}}
+/* Entrada natural da oferta e dos CTAs após 03:00 */
+.source-revealed.is-locked{display:block!important;max-height:0!important;overflow:hidden!important;opacity:0!important;visibility:hidden!important;pointer-events:none!important}
+.source-revealed.is-unlocked{display:block!important;max-height:100000px!important;overflow:visible!important;opacity:1!important;visibility:visible!important;pointer-events:auto!important;transition:opacity .8s ease, max-height .8s ease}
+.source-revealed.is-unlocked .source-offer-card,.source-revealed.is-unlocked .source-intro,.source-revealed.is-unlocked .source-guarantee,.source-revealed.is-unlocked .source-benefits,.source-revealed.is-unlocked .source-reviews,.source-revealed.is-unlocked .source-final,.source-revealed.is-unlocked .source-faq{animation:offer-fade-in .7s ease both}
+.source-revealed.is-unlocked .source-offer-card:nth-child(1){animation-delay:.08s}
+.source-revealed.is-unlocked .source-intro{animation-delay:.16s}
+.source-revealed.is-unlocked .source-guarantee{animation-delay:.24s}
+.source-revealed.is-unlocked .source-benefits{animation-delay:.32s}
+.source-revealed.is-unlocked .source-reviews{animation-delay:.4s}
+.source-revealed.is-unlocked .source-final{animation-delay:.48s}
+.source-revealed.is-unlocked .source-faq{animation-delay:.56s}
+.source-revealed .source-offer-card a,.source-revealed .source-gold-button{transition:opacity .55s ease,transform .55s cubic-bezier(.23,1,.32,1)}
+@keyframes offer-fade-in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@media (prefers-reduced-motion:reduce){.vsl-spinner{animation:none}.source-revealed.is-unlocked,.source-revealed.is-unlocked>*{animation:none!important;transition:none!important}}
