@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from "react";
-import { ChevronDown, Menu, UserRound, VolumeX } from "lucide-react";
+import { createElement, useEffect, useState } from "react";
+import { ChevronDown, Menu, UserRound } from "lucide-react";
 
 const VSL_REVEAL_SECONDS = 3295;
 const CHECKOUT_URL = "#checkout-configure";
@@ -52,8 +52,17 @@ function Countdown() {
 
 export default function Home() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
-  const [videoPlaying, setVideoPlaying] = useState(false);
-  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const scriptId = "vturb-player-6ab2848941fb62489316cee3";
+    if (document.getElementById(scriptId)) return;
+    const script = document.createElement("script");
+    script.id = scriptId;
+    script.type = "text/javascript";
+    script.src = "https://scripts.converteai.net/dc8ab8c0-f9ac-47c3-af12-a4174ba40c45/players/6ab2848941fb62489316cee3/v4/player.js";
+    script.async = true;
+    document.head.appendChild(script);
+  }, []);
 
   return (
     <div className="source-page">
@@ -68,11 +77,7 @@ export default function Home() {
 
         <section className="source-video" aria-label="VSL">
           <div className="source-video-inner">
-            {!videoPlaying && <img className="source-video-poster" src="/manus-storage/thumbnail_124f126b.jpg" alt="Présentation vidéo" />}
-            <video ref={videoRef} className={videoPlaying ? "source-video-el is-playing" : "source-video-el"} poster="/manus-storage/thumbnail_124f126b.jpg" playsInline controls preload="metadata" onPlay={() => setVideoPlaying(true)} onPause={() => setVideoPlaying(false)}>
-              <source src="/manus-storage/neuro-honey-vsl_4fbc1426.mp4" type="video/mp4" />
-            </video>
-            {!videoPlaying && <button className="source-video-overlay" onClick={() => { void videoRef.current?.play(); }}><strong>Ta vidéo a déjà commencé.</strong><VolumeX size={43} /><strong>Clique pour écouter</strong></button>}
+            {createElement("vturb-smartplayer", { id: "vid-6ab2848941fb62489316cee3", style: { display: "block", margin: "0 auto", width: "100%", maxWidth: "400px" } }, createElement("div", { className: "vturb-player-placeholder" }))}
           </div>
         </section>
 

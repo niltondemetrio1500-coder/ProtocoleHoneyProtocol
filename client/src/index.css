@@ -33,3 +33,9 @@
 .source-video-inner .source-video-el{z-index:2;opacity:0}
 .source-video-inner .source-video-el.is-playing{opacity:1}
 .source-video-inner .source-video-overlay{z-index:4}
+
+/* VTurb fornecido: proporção 9:16 real */
+.source-video{padding:0!important;background:#000!important}
+.source-video-inner{width:100%!important;height:min(177.3399014778325vw,709.36px)!important;min-height:0!important;aspect-ratio:auto!important;display:block!important;overflow:hidden!important;background:#000!important}
+.source-video-inner vturb-smartplayer{display:block!important;width:100%!important;max-width:400px!important;height:100%!important;aspect-ratio:9 / 16!important;margin:0 auto!important;background:#000!important}
+.source-video-inner .vturb-player-placeholder{position:relative;width:100%;height:100%;padding:0!important;z-index:0;background:#000!important}
