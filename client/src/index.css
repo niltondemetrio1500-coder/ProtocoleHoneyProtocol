@@ -40,3 +40,16 @@
 @media (min-width:768px){.source-video-inner .source-video-el{width:100%}}
 
 .source-video-inner .source-video-poster{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000}
+
+/* Smartplayer VSL fornecido pelo usuário */
+.source-vturb-host{position:absolute;inset:0;width:100%;height:100%;background:#000;overflow:hidden}
+.source-vturb-host vturb-smartplayer{display:block!important;width:100%!important;max-width:100%!important;height:100%!important;margin:0 auto!important;background:#000}
+.source-vturb-host .thumbnail{height:100%!important;padding:0!important}
+
+.source-vturb-host .thumbnail,.source-vturb-host .thumbnail-image{background:#000!important}
+.source-vturb-host .thumbnail-image{object-fit:contain!important;left:50%!important;transform:translateX(-50%)!important;width:100%!important;height:100%!important}
+
+/* Proporção da referência: faixa baixa preta e vídeo 406x720 centralizado */
+.source-video-inner{height:196px!important;min-height:196px!important;aspect-ratio:auto!important}
+.source-vturb-host vturb-smartplayer{position:absolute!important;top:0!important;left:50%!important;width:111px!important;height:196px!important;max-width:none!important;transform:translateX(-50%)!important}
+@media (max-width:560px){.source-video-inner{height:196px!important;min-height:196px!important}.source-vturb-host vturb-smartplayer{width:111px!important;height:196px!important}}

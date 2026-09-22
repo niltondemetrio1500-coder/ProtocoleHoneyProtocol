@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { ChevronDown, Menu, UserRound, VolumeX } from "lucide-react";
+import { ChevronDown, Menu, UserRound } from "lucide-react";
 
 const VSL_REVEAL_SECONDS = 3295;
 const CHECKOUT_URL = "#checkout-configure";
@@ -52,9 +52,38 @@ function Countdown() {
 
 export default function Home() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
-  const [videoPlaying, setVideoPlaying] = useState(false);
   const [offersUnlocked, setOffersUnlocked] = useState(() => new URLSearchParams(window.location.search).get("preview") === "1");
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const playerHost = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const host = playerHost.current;
+    if (!host) return;
+
+    const player = host;
+    let timer: number | undefined;
+    const reveal = () => {
+      if (new URLSearchParams(window.location.search).get("preview") === "1") {
+        setOffersUnlocked(true);
+        return;
+      }
+      timer = window.setTimeout(() => setOffersUnlocked(true), VSL_REVEAL_SECONDS * 1000);
+    };
+    player?.addEventListener("player:ready", reveal, { once: true });
+
+    const scriptId = "vturb-player-6ab2848941fb62489316cee3";
+    let script = document.getElementById(scriptId) as HTMLScriptElement | null;
+    if (!script) {
+      script = document.createElement("script");
+      script.id = scriptId;
+      script.src = "https://scripts.converteai.net/dc8ab8c0-f9ac-47c3-af12-a4174ba40c45/players/6ab2848941fb62489316cee3/v4/player.js";
+      script.async = true;
+      document.head.appendChild(script);
+    }
+    return () => {
+      if (timer) window.clearTimeout(timer);
+      player?.removeEventListener("player:ready", reveal);
+    };
+  }, []);
 
   return (
     <div className="source-page">
@@ -69,11 +98,10 @@ export default function Home() {
 
         <section className="source-video" aria-label="VSL">
           <div className="source-video-inner">
-            {!videoPlaying && <img className="source-video-poster" src="/manus-storage/video-thumbnail_8183135d.jpg" alt="Présentation vidéo" />}
-            <video className={videoPlaying ? "source-video-el is-playing" : "source-video-el"} ref={videoRef} playsInline controls preload="metadata" onPlay={() => setVideoPlaying(true)} onPause={() => setVideoPlaying(false)} onTimeUpdate={(event) => { if (event.currentTarget.currentTime >= VSL_REVEAL_SECONDS) setOffersUnlocked(true); }} onEnded={() => setOffersUnlocked(true)}>
-              <source src="/manus-storage/neuro-honey-vsl_4fbc1426.mp4" type="video/mp4" />
-            </video>
-            {!videoPlaying && <button className="source-video-overlay" onClick={() => { void videoRef.current?.play(); }}><strong>Ta vidéo a déjà commencé.</strong><VolumeX size={43} /><strong>Clique pour écouter</strong></button>}
+            <div className="source-vturb-host" aria-label="Lecteur vidéo Neuro-Honey">
+              {/* @ts-expect-error VTurb custom element */}
+              <vturb-smartplayer ref={playerHost} id="vid-6ab2848941fb62489316cee3" original-id="vid-6ab2848941fb62489316cee3" style={{ display: "block", margin: "0 auto", width: "100%", maxWidth: "100%" }} />
+            </div>
           </div>
         </section>
 
